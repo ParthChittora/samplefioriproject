@@ -1,0 +1,7 @@
+applications:
+- name: samplefioriproject
+  buildpacks:
+    - https://github.com/cloudfoundry/nodejs-buildpack.git
+  command: node server.js
+  path: dist
+  memory: 256M
