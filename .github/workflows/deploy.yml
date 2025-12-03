@@ -31,7 +31,9 @@ jobs:
         path: dist
 
     - name: Install CF CLI
-      uses: cloudfoundry/cf-cli-action@v2
+      run: |
+        wget -q -O cfcli.deb "https://packages.cloudfoundry.org/stable?release=debian64"
+        sudo dpkg -i cfcli.deb
 
 
     - name: Login to Cloud Foundry
