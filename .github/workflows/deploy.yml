@@ -31,7 +31,7 @@ jobs:
         path: dist
 
     - name: Install CF CLI
-      uses: cloudfoundry/cli-action@v2
+      uses: cloudfoundry/cf-cli-action@v2
 
 
     - name: Login to Cloud Foundry
