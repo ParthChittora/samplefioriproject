@@ -1,0 +1,45 @@
+name: Build & Deploy Fiori App
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build Fiori App
+      run: npm run build
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist
+        path: dist
+
+    - name: Install CF CLI
+      run: 
+        wget -q -O cfcli.deb "https://packages.cloudfoundry.org/stable?release=debian64"
+        sudo dpkg -i cfcli.deb
+
+    - name: Login to Cloud Foundry
+      run: 
+        cf api ${{ secrets.CF_API }}
+        cf auth ${{ secrets.CF_USERNAME }} ${{ secrets.CF_PASSWORD }}
+        cf target -o ${{ secrets.CF_ORG }} -s ${{ secrets.CF_SPACE }}
+
+    - name: Deploy to Cloud Foundry
+      run: cf push
